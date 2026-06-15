@@ -56,10 +56,10 @@ export interface FilterOptions {
 
 // Filter Types
 export interface DashboardFilters {
-  startDate: string | null;
-  endDate: string | null;
-  category: string | null;
-  region: string | null;
+  startDate?: string | null;
+  endDate?: string | null;
+  category?: string | null;
+  region?: string | null;
 }
 
 export interface TransactionQueryParams extends DashboardFilters {
