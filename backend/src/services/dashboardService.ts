@@ -116,11 +116,14 @@ export async function getRevenueTrend(
     ORDER BY date ASC
   `;
 
-  const rows = await prisma.$queryRawUnsafe<
-    { date: Date; revenue: number }[]
-  >(sql, ...params);
+  // Use any-cast for prisma to avoid TypeScript generic errors when the runtime
+  // prisma client shape differs on hosting platforms.
+  const rows = (await (prisma as any).$queryRawUnsafe(sql, ...params)) as {
+    date: Date;
+    revenue: number;
+  }[];
 
-  return rows.map((row) => ({
+  return rows.map((row: any) => ({
     date: formatDateOnly(row.date),
     revenue: Math.round(Number(row.revenue) * 100) / 100,
   }));
@@ -144,7 +147,7 @@ export async function getSalesByCategory(
     orderBy: { _sum: { amount: "desc" } },
   });
 
-  return rows.map((row) => ({
+  return rows.map((row: any) => ({
     category: row.category,
     sales: Math.round(decimalToNumber(row._sum.amount ?? 0) * 100) / 100,
   }));
@@ -161,7 +164,7 @@ export async function getSalesByRegion(
     orderBy: { _sum: { amount: "desc" } },
   });
 
-  return rows.map((row) => ({
+  return rows.map((row: any) => ({
     region: row.region,
     sales: Math.round(decimalToNumber(row._sum.amount ?? 0) * 100) / 100,
   }));
@@ -178,7 +181,7 @@ export async function getOrderStatusBreakdown(
     orderBy: { _count: { id: "desc" } },
   });
 
-  return rows.map((row) => ({
+  return rows.map((row: any) => ({
     status: row.status,
     count: row._count.id,
   }));
@@ -231,7 +234,7 @@ export async function* streamTransactionsForExport(
 
     if (rows.length === 0) break;
 
-    yield rows.map((row) => {
+    yield rows.map((row: any) => {
       const t = formatTransaction(row);
       return [
         t.transactionId,
@@ -271,7 +274,7 @@ export async function getTopProducts(
     take: 10,
   });
 
-  return rows.map((row) => ({
+  return rows.map((row: any) => ({
     productName: row.productName,
     revenue: Math.round(decimalToNumber(row._sum.amount ?? 0) * 100) / 100,
     quantity: row._count.id,
@@ -331,7 +334,7 @@ export async function getProductsByCategory(
   });
 
   const productCounts = await Promise.all(
-    rows.map(async (row) => {
+    rows.map(async (row: any) => {
       const uniqueCount = await prisma.transaction.findMany({
         where: { ...where, category: row.category },
         select: { productName: true },
