@@ -25,7 +25,7 @@ class ApiClient {
 
   constructor() {
     this.baseURL =
-      process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api";
+    process.env.NEXT_PUBLIC_API_URL || "https://2dcdm61s-4000.inc1.devtunnels.ms/api";
     this.client = axios.create({
       baseURL: this.baseURL,
       timeout: 30000,

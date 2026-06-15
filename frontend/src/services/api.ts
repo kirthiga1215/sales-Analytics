@@ -11,7 +11,9 @@ import type {
   TransactionQuery,
 } from "@/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000/api";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ??
+  "https://2dcdm61s-4000.inc1.devtunnels.ms/api";
 
 export const api = axios.create({
   baseURL: API_BASE,
