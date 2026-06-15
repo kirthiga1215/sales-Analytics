@@ -1,0 +1,26 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Transaction {
+  id              Int      @id @default(autoincrement())
+  transactionId   String   @unique @map("transaction_id")
+  customerName    String   @map("customer_name")
+  productName     String   @map("product_name")
+  category        String
+  region          String
+  amount          Decimal  @db.Decimal(10, 2)
+  status          String
+  transactionDate DateTime @map("transaction_date")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([transactionDate], map: "idx_date")
+  @@index([category], map: "idx_category")
+  @@index([region], map: "idx_region")
+  @@index([status], map: "idx_status")
+  @@map("transactions")
+}
