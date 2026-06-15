@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, createElement, type ReactNode } from "react";
 import type { DashboardFilters } from "@/types/api";
 
 interface DashboardContextType {
@@ -18,7 +18,7 @@ const defaultFilters: DashboardFilters = {
 
 const DashboardContext = createContext<DashboardContextType | undefined>(undefined);
 
-export function DashboardProvider({ children }: { children: React.ReactNode }) {
+export function DashboardProvider({ children }: { children: ReactNode }) {
   const [filters, setFilters] = useState<DashboardFilters>(defaultFilters);
 
   const handleResetFilters = useCallback(() => {
@@ -31,11 +31,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     resetFilters: handleResetFilters,
   };
 
-  return (
-    <DashboardContext.Provider value={value}>
-      {children}
-    </DashboardContext.Provider>
-  );
+  return createElement(DashboardContext.Provider, { value }, children);
 }
 
 export function useDashboardFilters() {

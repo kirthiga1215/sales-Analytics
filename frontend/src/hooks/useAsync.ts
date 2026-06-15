@@ -10,11 +10,11 @@ interface UseAsyncState<T> {
 
 export function useAsync<T>(
   asyncFunction: () => Promise<T>,
-  immediate = true
+  depsOrImmediate: unknown = true
 ): UseAsyncState<T> {
   const [state, setState] = useState<UseAsyncState<T>>({
     data: null,
-    loading: immediate,
+    loading: depsOrImmediate === true,
     error: null,
   });
 
@@ -32,11 +32,16 @@ export function useAsync<T>(
     }
   };
 
+  const immediate =
+    depsOrImmediate === true ||
+    depsOrImmediate === undefined ||
+    Array.isArray(depsOrImmediate);
+
   useEffect(() => {
     if (immediate) {
       execute();
     }
-  }, []);
+  }, Array.isArray(depsOrImmediate) ? depsOrImmediate : []);
 
   return state;
 }

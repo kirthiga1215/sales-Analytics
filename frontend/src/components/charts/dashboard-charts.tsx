@@ -47,7 +47,12 @@ export function RevenueChart({ title, dataKey }: ChartProps) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" angle={-45} textAnchor="end" height={60} />
           <YAxis />
-          <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+          <Tooltip formatter={(value) => {
+            if (typeof value === "number") {
+              return `$${value.toFixed(2)}`;
+            }
+            return value;
+          }} />
           <Legend />
           <Line
             type="monotone"
@@ -79,7 +84,12 @@ export function CategoryChart({ title, dataKey }: ChartProps) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="category" angle={-45} textAnchor="end" height={60} />
           <YAxis />
-          <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+          <Tooltip formatter={(value) => {
+            if (typeof value === "number") {
+              return `$${value.toFixed(2)}`;
+            }
+            return value;
+          }} />
           <Legend />
           <Bar dataKey={dataKey} fill="#3b82f6" />
         </BarChart>
@@ -106,7 +116,12 @@ export function RegionChart({ title, dataKey }: ChartProps) {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="region" />
           <YAxis />
-          <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+          <Tooltip formatter={(value) => {
+            if (typeof value === "number") {
+              return `$${value.toFixed(2)}`;
+            }
+            return value;
+          }} />
           <Legend />
           <Bar dataKey={dataKey} fill="#10b981" />
         </BarChart>
