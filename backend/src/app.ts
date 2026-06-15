@@ -8,9 +8,15 @@ import { errorHandler, notFoundHandler } from "./middlewares/errorHandler";
 
 const app = express();
 
+// Configure CORS to allow origins from config.corsOrigins
 app.use(
   cors({
-    origin: config.corsOrigin,
+    origin: (origin, callback) => {
+      // allow requests with no origin (like mobile apps or curl)
+      if (!origin) return callback(null, true);
+      if (config.corsOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
   })
 );
