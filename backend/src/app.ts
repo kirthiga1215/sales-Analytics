@@ -9,14 +9,11 @@ import { errorHandler, notFoundHandler } from "./middlewares/errorHandler";
 const app = express();
 
 // Configure CORS to allow origins from config.corsOrigins
+// Allow CORS for all origins by reflecting the request origin.
+// This effectively disables same-origin restrictions for browser clients.
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
-      if (config.corsOrigins.includes(origin)) return callback(null, true);
-      return callback(new Error("Not allowed by CORS"));
-    },
+    origin: true, // reflect request origin, allowing all origins
     credentials: true,
   })
 );
