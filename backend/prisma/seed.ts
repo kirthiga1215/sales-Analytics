@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 import { config } from "../src/config";
 import { CATEGORIES, REGIONS, STATUSES } from "../src/types";
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
