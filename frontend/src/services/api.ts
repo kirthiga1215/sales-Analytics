@@ -13,7 +13,7 @@ import type {
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ??
-  "http://localhost:4000/api";
+  "https://sales-analytics-production-dded.up.railway.app/api";
 
 export const api = axios.create({
   baseURL: API_BASE,
