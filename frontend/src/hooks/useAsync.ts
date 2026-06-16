@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UseAsyncState<T> {
   data: T | null;
@@ -18,14 +18,19 @@ export function useAsync<T>(
     error: null,
   });
 
+  // Keep ref of previous data to prevent flicker
+  const prevDataRef = useRef<T | null>(null);
+
   const execute = async () => {
-    setState({ data: null, loading: true, error: null });
+    // Keep previous data while loading to prevent flicker
+    setState((prev) => ({ data: prev.data, loading: true, error: null }));
     try {
       const response = await asyncFunction();
+      prevDataRef.current = response;
       setState({ data: response, loading: false, error: null });
     } catch (error) {
       setState({
-        data: null,
+        data: prevDataRef.current,
         loading: false,
         error: error instanceof Error ? error : new Error(String(error)),
       });
@@ -41,6 +46,7 @@ export function useAsync<T>(
     if (immediate) {
       execute();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, Array.isArray(depsOrImmediate) ? depsOrImmediate : []);
 
   return state;
